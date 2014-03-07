@@ -14,5 +14,11 @@ feature "Creating Cars" do
     click_button 'Create Car'
 
     expect(page).to have_content('1967 Ford Mustang created')
+    expect(page).to have_content('Make')  # Look for headers
+    expect(page).to have_content('Model')
+    expect(page).to have_content('Year')
+    expect(page).to have_content('Price')
+
+    expect(page).to have_content('2300') # check that price showed up in list
   end
 end
