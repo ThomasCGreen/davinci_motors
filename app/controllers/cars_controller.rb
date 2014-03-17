@@ -18,6 +18,8 @@ class CarsController < ApplicationController
     if @car.save
       redirect_to cars_path,
                   :notice => creation_message
+    else
+      render :new
     end
   end
 
