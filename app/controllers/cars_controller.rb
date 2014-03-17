@@ -22,13 +22,11 @@ class CarsController < ApplicationController
   end
 
   def update
-    respond_to do |format|
       if @car.update(car_params)
-        format.html { redirect_to @car, notice: 'Car was successfully updated.' }
+        redirect_to @car, notice: 'Car was successfully updated.'
       else
-        format.html { render action: 'edit' }
+        render action: 'edit'
       end
-    end
   end
 
   def edit
