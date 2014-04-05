@@ -1,5 +1,5 @@
 class CarsController < ApplicationController
-  before_action :set_car, only: [:edit, :show, :update, :claim]
+  before_action :set_car, only: [:edit, :show, :update, :claim, :unclaim]
 
   def index
     @cars = Car.where(user_id: nil)
@@ -21,6 +21,16 @@ class CarsController < ApplicationController
       "#{@car.make} #{@car.model} has been moved to your inventory"
     else
       redirect_to root_path, error: "Unable to claim car"
+    end
+  end
+
+  def unclaim
+    @car.user = nil
+    if @car.save
+      redirect_to root_path, notice:
+          "#{@car.make} #{@car.model} has been moved to general inventory"
+    else
+      redirect_to root_path, error: "Unable to unclaim car"
     end
   end
 

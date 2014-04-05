@@ -8,6 +8,7 @@ DavinciMotors::Application.routes.draw do
     member do
       # get '/claim/:id/claim', to: 'cars#claim'
       get 'claim'
+      get 'unclaim'
     end
 
     #collection do
