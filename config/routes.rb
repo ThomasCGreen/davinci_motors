@@ -4,7 +4,18 @@ DavinciMotors::Application.routes.draw do
 
   root to: "cars#index"
 
-  resources :cars
+  resources :cars do
+    member do
+      # get '/claim/:id/claim', to: 'cars#claim'
+      get 'claim'
+    end
+
+    #collection do
+    # ...
+    #end
+  end
+
+  get 'my_cars', to: 'cars#my_cars'
 
   resources :users,
             only: [:new, :create]
@@ -14,10 +25,13 @@ DavinciMotors::Application.routes.draw do
       as: 'login'
 
   post 'login',
-       to: 'sessions#create'
+      to: 'sessions#create'
 
   delete 'logout',
-         to: 'sessions#destroy'
+      to: 'sessions#destroy'
+
+  get 'auth/:provider/callback',
+      to: 'sessions#oauth'
 
   # You can have the root of your site routed with "root"
   # root 'welcome#index'
