@@ -7,6 +7,7 @@ gem 'faker'
 
 gem 'omniauth-github'
 gem 'byebug'
+gem 'twitter-bootstrap-rails'
 
 gem 'rspec-rails'
 gem 'guard-bundler'
