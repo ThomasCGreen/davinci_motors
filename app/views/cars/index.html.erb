@@ -20,8 +20,15 @@
         <td><%= car.year %></td>
         <td><%= number_to_currency(car.price) %></td>
         <td>
-          <%= link_to t('.claim', :default => t("helpers.links.claim")),
-                      claim_car_path(car), :class => 'btn btn-success btn-mini' %>
+          <% if current_user %>
+              <% if car.user %>
+                  <%= link_to t('.unclaim', :default => t("helpers.links.unclaim")),
+                              unclaim_car_path(car), :class => 'btn btn-success btn-mini' %>
+              <% else %>
+                  <%= link_to t('.claim', :default => t("helpers.links.claim")),
+                              claim_car_path(car), :class => 'btn btn-success btn-mini' %>
+              <% end %>
+          <% end %>
           <%= link_to t('.edit', :default => t("helpers.links.edit")),
                       edit_car_path(car), :class => 'btn btn-mini' %>
           <%= link_to t('.destroy', :default => t("helpers.links.destroy")),

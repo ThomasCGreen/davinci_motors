@@ -1,5 +1,6 @@
 class CarsController < ApplicationController
-  before_action :find_car, only: [:show, :edit, :update, :destroy, :claim]
+  before_action :find_car,
+                only: [:show, :edit, :update, :destroy, :claim, :unclaim]
 
   def index
     @cars = Car.where(user_id: nil)
@@ -27,12 +28,26 @@ class CarsController < ApplicationController
     end
   end
 
+  def unclaim
+    @car.user = nil
+    if @car.save
+      redirect_to root_path, notice:
+          "#{@car.make} #{@car.model} has been moved to unclaimed cars"
+    else
+      redirect_to root_path, error: "Unable to unclaim car"
+    end
+  end
+
+  def show
+  end
+
   def edit
   end
 
   def update
     if @car.update(car_params)
-      redirect_to cars_path, notice: "#{@car.year} #{@car.make} #{@car.model} updated"
+      redirect_to cars_path, notice:
+          "#{@car.year} #{@car.make} #{@car.model} updated"
     else
       render :edit
     end
@@ -41,13 +56,15 @@ class CarsController < ApplicationController
 
   def destroy
     @car.destroy
-    redirect_to cars_path, notice: "#{@car.year} #{@car.make} #{@car.model} was removed"
+    redirect_to cars_path, notice:
+        "#{@car.year} #{@car.make} #{@car.model} was removed"
   end
 
   def create
     @car = Car.new(car_params)
     if @car.save
-      redirect_to cars_path, notice: "#{@car.year} #{@car.make} #{@car.model} created"
+      redirect_to cars_path, notice:
+          "#{@car.year} #{@car.make} #{@car.model} created"
     else
       render :new
     end

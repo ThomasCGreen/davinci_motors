@@ -75,6 +75,15 @@ feature "User Authentication" do
     expect(page).to_not have_text("Signed in as #{@user.email}")
   end
 
+  scenario "if a user is not logged it no Claim button should be seen" do
+    @car1 = FactoryGirl.create(:car)
+    @car2 = FactoryGirl.create(:car)
+
+    visit "/"
+
+    expect(page).to_not have_link("Claim")
+  end
+
   scenario "allow a logged in user to claim a car" do
     @user = FactoryGirl.create(:user)
     @car1 = FactoryGirl.create(:car)
@@ -85,20 +94,28 @@ feature "User Authentication" do
     fill_in 'Password', with: @user.password
     click_button 'Login'
 
+    expect(page).to_not have_link("Unclaim")
+
     within("tr#car_#{@car1.id}") do
       click_link "Claim"
     end
 
-    expect(page).to have_text("#{@car1.make} #{@car1.model} has been moved to your inventory")
+    expect(page).to have_text(
+      "#{@car1.make} #{@car1.model} has been moved to your inventory")
 
     expect(page).to_not have_selector("tr#car_#{@car1.id}")
     expect(page).to have_selector("tr#car_#{@car2.id}")
 
     expect(page).to have_link('My Cars')
+    expect(page).to_not have_link("Unclaim")
 
     click_link 'My Cars'
     expect(page).to have_selector("tr#car_#{@car1.id}")
     expect(page).to_not have_selector("tr#car_#{@car2.id}")
+
+    expect(page).to_not have_link('My Cars')
+    expect(page).to have_link('Unclaimed Cars')
+    expect(page).to have_link('Unclaim')
   end
 
   scenario "allow a logged in user to unclaim a car" do
@@ -115,7 +132,8 @@ feature "User Authentication" do
       click_link "Claim"
     end
 
-    expect(page).to have_text("#{@car1.make} #{@car1.model} has been moved to your inventory")
+    expect(page).to have_text(
+      "#{@car1.make} #{@car1.model} has been moved to your inventory")
 
     expect(page).to_not have_selector("tr#car_#{@car1.id}")
     expect(page).to have_selector("tr#car_#{@car2.id}")
@@ -130,7 +148,8 @@ feature "User Authentication" do
       click_link "Unclaim"
     end
 
-    expect(page).to have_text("#{@car1.make} #{@car1.model} has been moved to general inventory")
+    expect(page).to have_text(
+      "#{@car1.make} #{@car1.model} has been moved to unclaimed cars")
 
     expect(page).to have_selector("tr#car_#{@car1.id}")
     expect(page).to have_selector("tr#car_#{@car2.id}")

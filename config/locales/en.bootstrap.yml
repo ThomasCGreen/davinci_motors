@@ -11,6 +11,8 @@ en:
       destroy: "Delete"
       new: "New %{model}"
       claim: "Claim"
+      unclaim: "Unclaim"
+      unclaimedinventory: "Unclaimed Inventory"
       edit: "Edit"
     titles:
       edit: "Edit %{model}"
